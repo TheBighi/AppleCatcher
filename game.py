@@ -22,7 +22,7 @@ mixer.music.play(loops=-1)
 
 #tree
 tree = pygame.image.load("C:\\Users\\sander.tamm\\Downloads\\tree.png").convert()
-tree = pygame.transform.scale(tree, (1000, 600))
+tree = pygame.transform.scale(tree, (1000, 1000))
 tree_pos = tree.get_rect()
 tree_pos.centerx = (screen.get_width() / 2)
 tree_pos.centery = (screen.get_height() / 2 * 0.8)
@@ -44,11 +44,14 @@ while running:
             running = False
 
     # fill the screen with a color to wipe away anything from last frame
-    screen.fill("chartreuse4")
-
-    screen.blit(imp, (player_pos))
+    screen.fill("deepskyblue1")
     screen.blit(tree, tree_pos)
-    screen.blit(grass, grass_pos)
+    screen.blit(grass, (screen.get_width() / 2 * 1.15, screen.get_height() / 2 * 1.3))
+    screen.blit(grass, (screen.get_width() / 2 * 0.25, screen.get_height() / 2 * 1.3))
+    screen.blit(grass, (screen.get_width() / 2 * 0, screen.get_height() / 2 * 1.3))
+    screen.blit(imp, (player_pos))
+    
+    
 
     keys = pygame.key.get_pressed()
 
