@@ -26,11 +26,16 @@ tree = pygame.transform.scale(tree, (1000, 600))
 tree_pos = tree.get_rect()
 tree_pos.centerx = (screen.get_width() / 2)
 tree_pos.centery = (screen.get_height() / 2 * 0.8)
+tree.set_colorkey(pygame.Color(0, 0, 0, 255))
 
 #grass
-grass = pygame.image.load
+grass = pygame.image.load("C:\\Users\\sander.tamm\\Downloads\\grass.png").convert()
+grass = pygame.transform.scale(grass, (600, 300))
+grass_pos = grass.get_rect()
+grass_pos.centerx = (screen.get_width() / 2)
+grass_pos.centery = (screen.get_height() / 2 * 0.8)
+grass.set_colorkey(pygame.Color(0, 0, 0, 255))
 
-tree.set_colorkey(pygame.Color(0, 0, 0, 255))
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -43,6 +48,7 @@ while running:
 
     screen.blit(imp, (player_pos))
     screen.blit(tree, tree_pos)
+    screen.blit(grass, grass_pos)
 
     keys = pygame.key.get_pressed()
 
