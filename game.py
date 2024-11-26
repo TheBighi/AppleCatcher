@@ -114,7 +114,7 @@ while running:
         for _ in range(apples_to_spawn):
             apples.append(Apple(window_width, window_height))
 
-    # drawing
+    # Fill the screen with a color to wipe away anything from the last frame
     screen.blit(sky, sky_pos)
     screen.blit(sky, sky_pos)
     screen.blit(tree, tree_pos)
@@ -129,23 +129,27 @@ while running:
         apple.draw(screen)
 
     # Player pos change
-    player_pos += player_dir * 8
+    player_pos += player_dir * settings.player_speed
     if player_pos.x < 0 - 25:
         player_pos.x = 0 - 25
     elif player_pos.x > window_width - 100:
         player_pos.x = window_width - 100
 
-    # score
+    # Display score
     score_text = font.render(f"Score: {score}", True, (255, 255, 255))
     screen.blit(score_text, (10, 10))
-    #debuggingggg
-    pygame.draw.rect(screen, (0, 255, 0), player_rect, 2)
 
+    # Draw player rectangle for debugging
+    pygame.draw.rect(screen, (0, 255, 0), player_rect, 2)  # Green rectangle for player
+
+    # Draw apple rectangles for debugging
     for apple in apples:
-        pygame.draw.rect(screen, (255, 0, 0), apple.rect, 2)
+        pygame.draw.rect(screen, (255, 0, 0), apple.rect, 2)  # Red rectangles for apples
 
+    # Update the display
     pygame.display.flip()
 
+    # Limit FPS to 60
     dt = clock.tick(60) / 1000
 
 pygame.quit()
