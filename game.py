@@ -7,10 +7,8 @@ import random
 
 # pygame setup
 pygame.init()
-window_width = settings.window_width
-window_height = settings.window_height
 
-screen = pygame.display.set_mode((window_width, window_height))
+screen = pygame.display.set_mode((settings.window_width, settings.window_height))
 clock = pygame.time.Clock()
 running = True
 dt = 0
@@ -64,8 +62,13 @@ apples = []
 
 # Apple spawn frequency and count
 apple_spawn_timer = 0
-max_apples_to_spawn = 2  # Max number of apples to spawn at once (random between 1 and max_apples_to_spawn)
 spawn_interval = 30  # Interval in frames to check for apple spawning
+min_apples_to_spawn = 1
+max_apples_to_spawn = 5
+
+def apple_uh():
+    global score
+    score -= 1
 
 while running:
     # Poll for events
@@ -89,8 +92,8 @@ while running:
     player_pos += player_dir * 1
     if player_pos.x < -25:
         player_pos.x = -25
-    elif player_pos.x > window_width - imp.get_width():
-        player_pos.x = window_width - imp.get_width()
+    elif player_pos.x > settings.window_width - imp.get_width():
+        player_pos.x = settings.window_width - imp.get_width()
 
     # Define player rectangle based on the current player position
     player_rect = pygame.Rect(player_pos.x, player_pos.y, imp.get_width(), imp.get_height())
@@ -102,17 +105,15 @@ while running:
             score += 1
             apples.remove(apple)  # Remove apple on collision
             ding.play()
-
-        if apple.rect.y > window_height:  # Remove apple if it falls off the screen
-            apples.remove(apple)
+            
 
     # Spawn new apples every few frames
     apple_spawn_timer += 1
     if apple_spawn_timer >= spawn_interval:
         apple_spawn_timer = 0
-        apples_to_spawn = random.randint(1, 1)
+        apples_to_spawn = random.randint(min_apples_to_spawn, max_apples_to_spawn)
         for _ in range(apples_to_spawn):
-            apples.append(Apple(window_width, window_height))
+            apples.append(Apple(settings.window_width, settings.window_height, update_hook=apple_uh))
 
     # Fill the screen with a color to wipe away anything from the last frame
     screen.blit(sky, sky_pos)
@@ -132,8 +133,8 @@ while running:
     player_pos += player_dir * settings.player_speed
     if player_pos.x < 0 - 25:
         player_pos.x = 0 - 25
-    elif player_pos.x > window_width - 100:
-        player_pos.x = window_width - 100
+    elif player_pos.x > settings.window_width - 100:
+        player_pos.x = settings.window_width - 100
 
     # Display score
     score_text = font.render(f"Score: {score}", True, (255, 255, 255))
