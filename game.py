@@ -83,8 +83,8 @@ while running:
     if score > 10 and not power_up1 and score < 31:
         power_up1 = True
         power_up1_time = pygame.time.get_ticks()
-        player_speed = 100
     if power_up1:
+        player_speed = 100
         if pygame.time.get_ticks() - power_up1_time > 10000:
             power_up1 = False
             player_speed = settings.player_speed
@@ -133,7 +133,7 @@ while running:
             apples.append(Apple(settings.window_width, settings.window_height, update_hook=apple_uh))
             
 
-    # Fill the screen with a color to wipe away anything from the last frame
+    # 
     screen.blit(sky, sky_pos)
     screen.blit(sky, sky_pos)
     screen.blit(tree, tree_pos)
