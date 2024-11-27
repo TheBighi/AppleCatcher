@@ -1,3 +1,4 @@
+import time
 import pygame
 from pygame import mixer
 from pygame import KEYDOWN
@@ -60,18 +61,34 @@ player_dir = pygame.Vector2()
 # Initialize apples list as empty
 apples = []
 
+player_speed = settings.player_speed
+
 # Apple spawn frequency and count
 apple_spawn_timer = 0
 spawn_interval = 30  # Interval in frames to check for apple spawning
 min_apples_to_spawn = 1
 max_apples_to_spawn = 5
 
+
+power_up1 = False
+power_up1_time = 0
+counter1 = 0
+
 def apple_uh():
     global score
     score -= 1
 
 while running:
-    # Poll for events
+    # power up
+    if score > 10 and not power_up1 and score < 31:
+        power_up1 = True
+        power_up1_time = pygame.time.get_ticks()
+        player_speed = 100
+    if power_up1:
+        if pygame.time.get_ticks() - power_up1_time > 10000:
+            power_up1 = False
+            player_speed = settings.player_speed
+    # made for direction changes
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -88,7 +105,7 @@ while running:
             if event.key == pygame.K_d:
                 player_dir.x -= 1.0
 
-    # Update player position
+    # player pos update
     player_pos += player_dir * 1
     if player_pos.x < -25:
         player_pos.x = -25
@@ -98,7 +115,7 @@ while running:
     # Define player rectangle based on the current player position
     player_rect = pygame.Rect(player_pos.x, player_pos.y, imp.get_width(), imp.get_height())
 
-    # Update apples and check for collisions
+    # apple collision checlk
     for apple in apples[:]:
         apple.update()
         if apple.check_collision(player_rect):
@@ -114,6 +131,7 @@ while running:
         apples_to_spawn = random.randint(min_apples_to_spawn, max_apples_to_spawn)
         for _ in range(apples_to_spawn):
             apples.append(Apple(settings.window_width, settings.window_height, update_hook=apple_uh))
+            
 
     # Fill the screen with a color to wipe away anything from the last frame
     screen.blit(sky, sky_pos)
@@ -130,7 +148,7 @@ while running:
         apple.draw(screen)
 
     # Player pos change
-    player_pos += player_dir * settings.player_speed
+    player_pos += player_dir * player_speed
     if player_pos.x < 0 - 25:
         player_pos.x = 0 - 25
     elif player_pos.x > settings.window_width - 100:
