@@ -73,10 +73,12 @@ max_apples_to_spawn = 5
 power_up1 = False
 power_up1_time = 0
 counter1 = 0
-
+apples_lost = 0
 def apple_uh():
     global score
+    global apples_lost
     score -= 1
+    apples_lost += 1
 
 while running:
     # power up
@@ -104,6 +106,8 @@ while running:
                 player_dir.x += 1.0
             if event.key == pygame.K_d:
                 player_dir.x -= 1.0
+#    if apples_lost >= settings.fail_condition:
+#       running = False
 
     # player pos update
     player_pos += player_dir * 1
@@ -157,6 +161,10 @@ while running:
     # Display score
     score_text = font.render(f"Score: {score}", True, (255, 255, 255))
     screen.blit(score_text, (10, 10))
+
+    # Display apples lost
+    applesl_text = font.render(f"Apples lost: {apples_lost}", True, (255, 255, 255))
+    screen.blit(applesl_text, (10, 45))
 
     # Draw player rectangle for debugging
     pygame.draw.rect(screen, (0, 255, 0), player_rect, 2)  # Green rectangle for player
