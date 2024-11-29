@@ -67,17 +67,20 @@ player_speed = settings.player_speed
 apple_spawn_timer = 0
 spawn_interval = 30  # Interval in frames to check for apple spawning
 min_apples_to_spawn = 1
-max_apples_to_spawn = 5
+max_apples_to_spawn = 2
 
 
 power_up1 = False
 power_up1_time = 0
-counter1 = 0
+
+debuff1 = False
+debuff1_time = 0
+counterdebuff = 0
+
 apples_lost = 0
+
 def apple_uh():
-    global score
     global apples_lost
-    score -= 1
     apples_lost += 1
 
 while running:
@@ -90,6 +93,19 @@ while running:
         if pygame.time.get_ticks() - power_up1_time > 10000:
             power_up1 = False
             player_speed = settings.player_speed
+    if apples_lost> 10 and not debuff1 and counterdebuff == 0:
+        debuff1 = True
+        debuff1_time = pygame.time.get_ticks()
+    if debuff1:
+        
+        settings.GRAV = 10
+
+        if pygame.time.get_ticks() - debuff1_time > 3000:
+            counterdebuff += 1
+            debuff1 = False
+            settings.GRAV = 3
+            print("misiganes")
+
     # made for direction changes
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -165,6 +181,10 @@ while running:
     # Display apples lost
     applesl_text = font.render(f"Apples lost: {apples_lost}", True, (255, 255, 255))
     screen.blit(applesl_text, (10, 45))
+
+    #if debuff1 and :
+    #    debufftimer = font.render(f"Debuff will be active for 5 seconds", True, (255, 255, 255))
+    #    screen.blit(debufftimer, (10, 70))
 
     # Draw player rectangle for debugging
     pygame.draw.rect(screen, (0, 255, 0), player_rect, 2)  # Green rectangle for player
