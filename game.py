@@ -21,7 +21,7 @@ score = 0
 pygame.mixer.init()
 music = pygame.mixer.Sound("music.mp3")
 ding = pygame.mixer.Sound('ding.mp3')
-music.set_volume(0.1)
+music.set_volume(0.075)
 music.play(loops=-1) # REMIND CAHNGE DING SOUND EFFECT LOUDER!!!!!!!!!!!
 
 # player
