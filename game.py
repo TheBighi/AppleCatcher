@@ -19,8 +19,10 @@ score = 0
 
 #sound
 pygame.mixer.init()
-mixer.music.load("music.wav")
+music = pygame.mixer.Sound("music.mp3")
 ding = pygame.mixer.Sound('ding.mp3')
+music.set_volume(0.1)
+music.play(loops=-1) # REMIND CAHNGE DING SOUND EFFECT LOUDER!!!!!!!!!!!
 
 # player
 imp_def = pygame.image.load("mam.png").convert()
@@ -65,7 +67,7 @@ player_speed = settings.player_speed
 
 # Apple spawn frequency and count
 apple_spawn_timer = 0
-spawn_interval = 30  # Interval in frames to check for apple spawning
+spawn_interval = 60  # Interval in frames to check for apple spawning
 min_apples_to_spawn = 1
 max_apples_to_spawn = 2
 
@@ -74,7 +76,8 @@ power_up1 = False
 power_up1_time = 0
 
 debuff1 = False
-debuff1_time = 0
+debuff1_current_time = 0
+debuff1_time = 4000 # ms 
 counterdebuff = 0
 
 apples_lost = 0
@@ -93,14 +96,15 @@ while running:
         if pygame.time.get_ticks() - power_up1_time > 10000:
             power_up1 = False
             player_speed = settings.player_speed
-    if apples_lost> 10 and not debuff1 and counterdebuff == 0:
+    if apples_lost >= 10 and not debuff1 and counterdebuff == 0:
         debuff1 = True
-        debuff1_time = pygame.time.get_ticks()
+        debuff1_current_time = pygame.time.get_ticks()
     if debuff1:
         
         settings.GRAV = 10
-
-        if pygame.time.get_ticks() - debuff1_time > 3000:
+        for apple in apples:
+            apple.speed = settings.GRAV
+        if pygame.time.get_ticks() - debuff1_current_time > debuff1_time:
             counterdebuff += 1
             debuff1 = False
             settings.GRAV = 3
