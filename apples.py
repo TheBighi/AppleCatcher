@@ -8,6 +8,7 @@ class Apple:
         self.window_height = window_height
         self.image = pygame.image.load("apple.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, (50, 50))
+        self.image.set_colorkey(pygame.Color(255, 255, 255, 255))
         self.rect = self.image.get_rect()
         self.reset_position()
         self.speed = settings.GRAV
