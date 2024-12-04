@@ -2,11 +2,12 @@ import pygame
 import random
 import settings
 
+apple_img = pygame.image.load("apple.png").convert_alpha()
 class Apple:
     def __init__(self, window_width, window_height, update_hook):
         self.window_width = window_width
         self.window_height = window_height
-        self.image = pygame.image.load("apple.png").convert_alpha()
+        self.image = apple_img
         self.image = pygame.transform.scale(self.image, (50, 50))
         self.image.set_colorkey(pygame.Color(255, 255, 255, 255))
         self.rect = self.image.get_rect()
