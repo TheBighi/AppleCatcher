@@ -92,7 +92,7 @@ while running:
         power_up1 = True
         power_up1_time = pygame.time.get_ticks()
     if power_up1:
-        player_speed = 100
+        player_speed = 15
         if pygame.time.get_ticks() - power_up1_time > 10000:
             power_up1 = False
             player_speed = settings.player_speed
@@ -101,7 +101,7 @@ while running:
         debuff1_current_time = pygame.time.get_ticks()
     if debuff1:
         
-        settings.GRAV = 10
+        settings.GRAV = 6
         for apple in apples:
             apple.speed = settings.GRAV
         if pygame.time.get_ticks() - debuff1_current_time > debuff1_time:
@@ -191,11 +191,11 @@ while running:
     #    screen.blit(debufftimer, (10, 70))
 
     # Draw player rectangle for debugging
-    pygame.draw.rect(screen, (0, 255, 0), player_rect, 2)  # Green rectangle for player
+    #pygame.draw.rect(screen, (0, 255, 0), player_rect, 2)  # Green rectangle for player
 
     # Draw apple rectangles for debugging
-    for apple in apples:
-        pygame.draw.rect(screen, (255, 0, 0), apple.rect, 2)  # Red rectangles for apples
+    #for apple in apples:
+    #    pygame.draw.rect(screen, (255, 0, 0), apple.rect, 2)  # Red rectangles for apples
 
     # Update the display
     pygame.display.flip()
