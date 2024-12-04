@@ -1,17 +1,20 @@
-import time
 import pygame
+import settings
+pygame.init()
+screen = pygame.display.set_mode((settings.window_width, settings.window_height))
 from pygame import mixer
 from pygame import KEYDOWN
-import settings
 from apples import Apple
 import random
+from menu import Button
 
 # pygame setup
-pygame.init()
 
-screen = pygame.display.set_mode((settings.window_width, settings.window_height))
 clock = pygame.time.Clock()
+start_screen = True
 running = True
+game_running = False
+fail_screen = True
 dt = 0
 font = pygame.font.Font(None, 36)
 
@@ -21,8 +24,10 @@ score = 0
 pygame.mixer.init()
 music = pygame.mixer.Sound("music.mp3")
 ding = pygame.mixer.Sound('ding.mp3')
+badsfx = pygame.mixer.Sound("badsfx.mp3")
 music.set_volume(0.075)
 music.play(loops=-1) # REMIND CAHNGE DING SOUND EFFECT LOUDER!!!!!!!!!!!
+
 
 # player
 imp_def = pygame.image.load("mam.png").convert()
@@ -71,10 +76,8 @@ spawn_interval = 60  # Interval in frames to check for apple spawning
 min_apples_to_spawn = 1
 max_apples_to_spawn = 2
 
-
 power_up1 = False
 power_up1_time = 0
-
 debuff1 = False
 debuff1_current_time = 0
 debuff1_time = 4000 # ms 
@@ -82,12 +85,57 @@ counterdebuff = 0
 
 apples_lost = 0
 
+def start():
+    global game_running
+    game_running = True
+
+def quit():
+    exit(0)
+
+def suva():
+    pass
+
+start_btn = Button(screen, start, (settings.window_width / 2, settings.window_height / 2), "Start", "font.ttf", 50)
+quit_btn = Button(screen, quit, (settings.window_width / 2, settings.window_height / 2 + 125), "Quit", "font.ttf", 50)
+titlebtn = Button(screen, suva, (settings.window_width / 2, settings.window_height / 2 - 200), "Apple Catching Game", "font.ttf", 50)
+
 def apple_uh():
     global apples_lost
     apples_lost += 1
 
 while running:
     # power up
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_a:
+                player_dir.x -= 1.0
+                imp = imp_def
+            if event.key == pygame.K_d:
+                player_dir.x += 1.0
+                imp = imp_rot
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_a:
+                player_dir.x += 1.0
+            if event.key == pygame.K_d:
+                player_dir.x -= 1.0
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if not game_running:
+                start_btn.check_click()
+                quit_btn.check_click()
+
+    if not game_running:
+        screen.fill((0, 0, 0))
+        start_btn.update()
+        quit_btn.update()
+        titlebtn.draw()
+
+        pygame.display.flip()
+        # Limit FPS to 60
+        dt = clock.tick(60) / 1000
+        continue
+
     if score > 10 and not power_up1 and score < 31:
         power_up1 = True
         power_up1_time = pygame.time.get_ticks()
@@ -109,23 +157,8 @@ while running:
             debuff1 = False
             settings.GRAV = 3
             print("misiganes")
-
-    # made for direction changes
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_a:
-                player_dir.x -= 1.0
-                imp = imp_def
-            if event.key == pygame.K_d:
-                player_dir.x += 1.0
-                imp = imp_rot
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_a:
-                player_dir.x += 1.0
-            if event.key == pygame.K_d:
-                player_dir.x -= 1.0
+    if apples_lost >= settings.fail_count:
+        running = False
 #    if apples_lost >= settings.fail_condition:
 #       running = False
 
@@ -157,7 +190,7 @@ while running:
             apples.append(Apple(settings.window_width, settings.window_height, update_hook=apple_uh))
             
 
-    # 
+    
     screen.blit(sky, sky_pos)
     screen.blit(sky, sky_pos)
     screen.blit(tree, tree_pos)
@@ -170,7 +203,6 @@ while running:
     # Draw apples
     for apple in apples:
         apple.draw(screen)
-
     # Player pos change
     player_pos += player_dir * player_speed
     if player_pos.x < 0 - 25:
@@ -201,6 +233,23 @@ while running:
     pygame.display.flip()
 
     # Limit FPS to 60
+    dt = clock.tick(60) / 1000
+
+quit_btn2 = Button(screen, quit, (settings.window_width / 2, settings.window_height / 2), "Quit", "font.ttf", 50)
+failbtn2 = Button(screen, suva, (settings.window_width / 2, settings.window_height / 2 - 200), "You have failed", "font.ttf", 50)
+
+while fail_screen:
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            quit_btn2.check_click()
+
+    screen.fill((0, 0, 0))
+
+    quit_btn2.update()
+    failbtn2.draw()
+
+    pygame.display.flip()
+
     dt = clock.tick(60) / 1000
 
 pygame.quit()
