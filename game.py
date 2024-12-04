@@ -16,7 +16,7 @@ running = True
 game_running = False
 fail_screen = True
 dt = 0
-font = pygame.font.Font(None, 36)
+font = pygame.font.Font("font.TTF", 36)
 
 score = 0
 
@@ -216,7 +216,7 @@ while running:
 
     # Display apples lost
     applesl_text = font.render(f"Apples lost: {apples_lost}", True, (255, 255, 255))
-    screen.blit(applesl_text, (10, 45))
+    screen.blit(applesl_text, (10, 75))
 
     #if debuff1 and :
     #    debufftimer = font.render(f"Debuff will be active for 5 seconds", True, (255, 255, 255))
