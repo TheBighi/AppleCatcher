@@ -17,6 +17,7 @@ game_running = False
 fail_screen = True
 dt = 0
 font = pygame.font.Font("font.TTF", 36)
+font2 = pygame.font.Font("font.TTF", 18)
 
 score = 0
 
@@ -78,6 +79,8 @@ max_apples_to_spawn = 2
 
 power_up1 = False
 power_up1_time = 0
+power_up1_ready = False
+
 debuff1 = False
 debuff1_current_time = 0
 debuff1_time = 4000 # ms 
@@ -115,6 +118,11 @@ while running:
             if event.key == pygame.K_d:
                 player_dir.x += 1.0
                 imp = imp_rot
+            if event.key == pygame.K_e and power_up1_ready:
+                print("yes")
+                power_up1_ready = False
+                power_up1 = True
+                power_up1_time = pygame.time.get_ticks()
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
                 player_dir.x += 1.0
@@ -124,6 +132,7 @@ while running:
             if not game_running:
                 start_btn.check_click()
                 quit_btn.check_click()
+    
 
     if not game_running:
         screen.fill((0, 0, 0))
@@ -136,12 +145,12 @@ while running:
         dt = clock.tick(60) / 1000
         continue
 
-    if score > 10 and not power_up1 and score < 31:
-        power_up1 = True
-        power_up1_time = pygame.time.get_ticks()
+    if score >= 2 and not power_up1 and score < 3:
+        print("hehe")
+        power_up1_ready = True
     if power_up1:
         player_speed = 15
-        if pygame.time.get_ticks() - power_up1_time > 10000:
+        if pygame.time.get_ticks() - power_up1_time > 8000:
             power_up1 = False
             player_speed = settings.player_speed
     if apples_lost >= 10 and not debuff1 and counterdebuff == 0:
@@ -218,9 +227,15 @@ while running:
     applesl_text = font.render(f"Apples lost: {apples_lost}", True, (255, 255, 255))
     screen.blit(applesl_text, (10, 75))
 
-    #if debuff1 and :
-    #    debufftimer = font.render(f"Debuff will be active for 5 seconds", True, (255, 255, 255))
-    #    screen.blit(debufftimer, (10, 70))
+    if power_up1_ready:
+        poweruptext1 = font2.render(f"Power up ready, press e to activate.", True, (255, 255, 255))
+        screen.blit(poweruptext1, (10, 140))
+
+
+
+
+
+
 
     # Draw player rectangle for debugging
     #pygame.draw.rect(screen, (0, 255, 0), player_rect, 2)  # Green rectangle for player
