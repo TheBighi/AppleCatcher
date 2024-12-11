@@ -73,7 +73,7 @@ player_speed = settings.player_speed
 
 # Apple spawn frequency and count
 apple_spawn_timer = 0
-spawn_interval = 60  # Interval in frames to check for apple spawning
+spawn_interval = settings.spawn_apple_interval  # Interval in frames to check for apple spawning
 min_apples_to_spawn = 1
 max_apples_to_spawn = 2
 
@@ -118,8 +118,8 @@ while running:
             if event.key == pygame.K_d:
                 player_dir.x += 1.0
                 imp = imp_rot
-            if event.key == pygame.K_e and power_up1_ready:
-                print("yes")
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_e and power_up1_ready:
+                print("Power-up activated!")
                 power_up1_ready = False
                 power_up1 = True
                 power_up1_time = pygame.time.get_ticks()
@@ -145,31 +145,30 @@ while running:
         dt = clock.tick(60) / 1000
         continue
 
-    if score >= 2 and not power_up1 and score < 3:
-        print("hehe")
+    if score != 0 and score % 20 == 0 and not power_up1:
+        print("heheheha")
         power_up1_ready = True
     if power_up1:
         player_speed = 15
-        if pygame.time.get_ticks() - power_up1_time > 8000:
-            power_up1 = False
-            player_speed = settings.player_speed
-    if apples_lost >= 10 and not debuff1 and counterdebuff == 0:
+    if pygame.time.get_ticks() - power_up1_time > 8000:
+        power_up1 = False
+        player_speed = settings.player_speed
+    if apples_lost != 0 and apples_lost % 8 == 0 and not debuff1:
         debuff1 = True
         debuff1_current_time = pygame.time.get_ticks()
     if debuff1:
-        
-        settings.GRAV = 6
+        settings.GRAV = 4
+        spawn_interval = 20
         for apple in apples:
             apple.speed = settings.GRAV
         if pygame.time.get_ticks() - debuff1_current_time > debuff1_time:
             counterdebuff += 1
             debuff1 = False
             settings.GRAV = 3
+            spawn_interval = settings.spawn_apple_interval
             print("misiganes")
     if apples_lost >= settings.fail_count:
         running = False
-#    if apples_lost >= settings.fail_condition:
-#       running = False
 
     # player pos update
     player_pos += player_dir * 1
@@ -220,7 +219,7 @@ while running:
         player_pos.x = settings.window_width - 100
 
     # Display score
-    score_text = font.render(f"Score: {score}", True, (255, 255, 255))
+    score_text = font.render(f"Score: {score}", True, (255, 255, 255))  
     screen.blit(score_text, (10, 10))
 
     # Display apples lost
@@ -229,20 +228,10 @@ while running:
 
     if power_up1_ready:
         poweruptext1 = font2.render(f"Power up ready, press e to activate.", True, (255, 255, 255))
-        screen.blit(poweruptext1, (10, 140))
-
-
-
-
-
-
-
-    # Draw player rectangle for debugging
-    #pygame.draw.rect(screen, (0, 255, 0), player_rect, 2)  # Green rectangle for player
-
-    # Draw apple rectangles for debugging
-    #for apple in apples:
-    #    pygame.draw.rect(screen, (255, 0, 0), apple.rect, 2)  # Red rectangles for apples
+        screen.blit(poweruptext1, (150, 675))
+    if debuff1:
+        debuff1_text = font.render(f"Debuff active", True, (255, 255, 255))
+        screen.blit(debuff1_text, (10, 140))
 
     # Update the display
     pygame.display.flip()
@@ -252,6 +241,7 @@ while running:
 
 quit_btn2 = Button(screen, quit, (settings.window_width / 2, settings.window_height / 2), "Quit", "font.ttf", 50)
 failbtn2 = Button(screen, suva, (settings.window_width / 2, settings.window_height / 2 - 200), "You have failed", "font.ttf", 50)
+failbtn3 = Button(screen, suva, (settings.window_width / 2, settings.window_height / 2 - 100), f"You lost {apples_lost} apples", "font.ttf", 50)
 
 while fail_screen:
     for event in pygame.event.get():
@@ -262,6 +252,7 @@ while fail_screen:
 
     quit_btn2.update()
     failbtn2.draw()
+    failbtn3.draw()
 
     pygame.display.flip()
 
