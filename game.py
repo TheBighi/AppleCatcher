@@ -19,6 +19,13 @@ dt = 0
 font = pygame.font.Font("font.TTF", 36)
 font2 = pygame.font.Font("font.TTF", 18)
 
+high_score = 0
+
+with open ("highscore.txt", "r") as f:
+    hsl = f.readline()
+    high_score = int(hsl.strip())
+high_score_display = high_score
+
 score = 0
 
 #sound
@@ -197,8 +204,9 @@ while running:
         for _ in range(apples_to_spawn):
             apples.append(Apple(settings.window_width, settings.window_height, update_hook=apple_uh))
             
+    if score > high_score_display:
+        high_score_display = score
 
-    
     screen.blit(sky, sky_pos)
     screen.blit(sky, sky_pos)
     screen.blit(tree, tree_pos)
@@ -222,16 +230,19 @@ while running:
     score_text = font.render(f"Score: {score}", True, (255, 255, 255))  
     screen.blit(score_text, (10, 10))
 
+    high_score_text = font.render(f"High Score: {high_score_display}", True, (255, 255, 255))  
+    screen.blit(high_score_text, (10, 75))
+
     # Display apples lost
     applesl_text = font.render(f"Apples lost: {apples_lost}", True, (255, 255, 255))
-    screen.blit(applesl_text, (10, 75))
+    screen.blit(applesl_text, (10, 140))
 
     if power_up1_ready:
         poweruptext1 = font2.render(f"Power up ready, press e to activate.", True, (255, 255, 255))
         screen.blit(poweruptext1, (150, 675))
     if debuff1:
         debuff1_text = font.render(f"Debuff active", True, (255, 255, 255))
-        screen.blit(debuff1_text, (10, 140))
+        screen.blit(debuff1_text, (10, 205))
 
     # Update the display
     pygame.display.flip()
@@ -244,6 +255,10 @@ failbtn2 = Button(screen, suva, (settings.window_width / 2, settings.window_heig
 failbtn3 = Button(screen, suva, (settings.window_width / 2, settings.window_height / 2 - 100), f"You lost {apples_lost} apples", "font.ttf", 50)
 
 while fail_screen:
+    if score > high_score:
+        high_score = score
+        with open("highscore.txt", "w") as file:
+            file.write(str(high_score))
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
             quit_btn2.check_click()
