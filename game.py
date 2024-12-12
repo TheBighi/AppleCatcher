@@ -157,7 +157,7 @@ while running:
         dt = clock.tick(60) / 1000
         continue
     # power upi asi
-    if score != 0 and score % 2 == 0 and not power_up1:
+    if score != 0 and score % 15 == 0 and not power_up1:
         power_up1_ready = True
     if power_up1:
         player_speed = 15
