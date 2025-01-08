@@ -1,4 +1,4 @@
-# Apple Catcherr 🍎:
+# Apple Catcherr 🍎
 
 ## Overview 🕶️
 Apple Catcher is a simple game where you have to collect apples.
