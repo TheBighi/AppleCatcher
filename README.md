@@ -1,5 +1,5 @@
 # Apple Catcherr 🍎
-
+Cool and epic adventure of collecting apples.
 ## Overview 🕶️
 Apple Catcher is a simple game where you have to collect apples.
 
