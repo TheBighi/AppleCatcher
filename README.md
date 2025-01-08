@@ -3,7 +3,7 @@ Cool and epic adventure of collecting apples.
 ## Overview 🕶️
 Apple Catcher is a simple game where you have to collect apples.
 
-### How to open the game 🎮:
+### How to open the game 🎮
 To run the game, follow these steps:
 * You need to have python.
 * Install pygame, as its necessary for the game: _pip install pygame_
